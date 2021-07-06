@@ -99,6 +99,9 @@ def testcase_test_pdfdataset():
         )
     # loop through dataset
     return dl
+@property
+def train_dataloader(self) -> DataLoader:
+    return testcase_test_pdfdataset()
 # __name__ is an attribute of the file itself, essentially a 'main' function
 if __name__ == '__main__':
     testcase_test_pdfdataset()

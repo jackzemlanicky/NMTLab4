@@ -17,6 +17,6 @@ class VGGTrainer(pl.LightningModule):
     def configure_optimizers(self):
         optimizer = Adam(self.model.parameters(),lr=self.args.lr,weight_decay=self.args.weight_decay)
         return {'optimizer':optimizer}
-
-dataset.testcase_test_pdfdataset()
+ # How does above class relate to below method and variable?
 trainer =Trainer
+trainer.fit(VGGTrainer,dataset.train_dataloader)
