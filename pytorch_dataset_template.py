@@ -85,7 +85,7 @@ class PDFDataset(Dataset):
             X.extend(data_by_type[k])
         self.X = X
 
-def testcase_test_pdfdataset():
+def pdfdataset()-> DataLoader:
     dataset = PDFDataset('byte_plot')
     # setup dataloader
     # check pytorch document for the parameter list
@@ -101,7 +101,7 @@ def testcase_test_pdfdataset():
     return dl
 @property
 def train_dataloader(self) -> DataLoader:
-    return testcase_test_pdfdataset()
+    return pdfdataset()
 # __name__ is an attribute of the file itself, essentially a 'main' function
 if __name__ == '__main__':
-    testcase_test_pdfdataset()
+    pdfdataset()
