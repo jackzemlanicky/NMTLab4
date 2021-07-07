@@ -6,9 +6,9 @@ import os
 import numpy as np
 import cv2
 
-
 path_name_benign = 'Data\\Sample\\'
 path_name_malicious = 'Data\\Sample\\'
+
 
 class PDFDataset(Dataset):
     def __init__(self,plot_type):
@@ -93,15 +93,12 @@ def pdfdataset()-> DataLoader:
         dataset,
         batch_size=32, 
         shuffle=True,
-        num_workers=1,
+        num_workers=12,
         pin_memory=True,
         drop_last=False,
         )
     # loop through dataset
     return dl
-@property
-def train_dataloader(self) -> DataLoader:
-    return pdfdataset()
 # __name__ is an attribute of the file itself, essentially a 'main' function
 if __name__ == '__main__':
     pdfdataset()
