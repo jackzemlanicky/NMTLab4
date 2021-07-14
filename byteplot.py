@@ -21,7 +21,6 @@ def convert(directory,name,width):
     pdfFile = open(directory+name,'rb')
     # Get the array of bytes from the stream
     byteArray = pdfFile.read()
-    print(byteArray)
     # Put the individual bytes (ascii values) into an array
     for byte in byteArray:
         int_array.append(byte)

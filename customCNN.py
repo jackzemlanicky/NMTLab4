@@ -76,7 +76,7 @@ def main():
                         help='input batch size for training (default: 64)')
     parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
                         help='input batch size for testing (default: 1000)')
-    parser.add_argument('--epochs', type=int, default=1, metavar='N',
+    parser.add_argument('--epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=1.0, metavar='LR',
                         help='learning rate (default: 1.0)')
@@ -112,12 +112,9 @@ def main():
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
         ])
-    '''
-    dataset2 = datasets.MNIST('../data', train=False,
-                       transform=transform)
-    '''                   
+                 
     train_loader = data.pdfdataset()
-    #test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
+    #test_loader = data.pdftestset()
 
     model = Net().to(device)
     optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
