@@ -10,13 +10,40 @@ from torch.optim import Adam, optimizer
 from pytorch_lightning.callbacks import EarlyStopping
 from torch.multiprocessing import freeze_support
 
-if __name__=='__main__':
-    print('loop')
-    torch.multiprocessing.freeze_support()
-class VGGTrainer(pl.LightningModule):
+
+class Net(Module):   
+    def __init__(self):
+        super(Net, self).__init__()
+
+        self.cnn_layers = Sequential(
+            # Defining a 2D convolution layer
+            Conv2d(1, 4, kernel_size=3, stride=1, padding=1),
+            BatchNorm2d(4),
+            ReLU(inplace=True),
+            MaxPool2d(kernel_size=2, stride=2),
+            # Defining another 2D convolution layer
+            Conv2d(4, 4, kernel_size=3, stride=1, padding=1),
+            BatchNorm2d(4),
+            ReLU(inplace=True),
+            MaxPool2d(kernel_size=2, stride=2),
+        )
+
+        self.linear_layers = Sequential(
+            Linear(4 * 7 * 7, 10)
+        )
+
+    # Defining the forward pass    
+    def forward(self, x):
+        x = self.cnn_layers(x)
+        x = x.view(x.size(0), -1)
+        x = self.linear_layers(x)
+        return x
+model = Net()
+print(model)
+class MyTrainer(pl.LightningModule):
     def __init__(self):
         super().__init__()
-        self.model = vgg11(False,True)
+        self.model = model
     def forward(self,x):
         x =self.model(x)
         return x
@@ -32,5 +59,5 @@ class VGGTrainer(pl.LightningModule):
 # Temporary hard-coded params until I can get this to work 
 earlystop = EarlyStopping(monitor=None,patience=1,mode='min')
 
-trainer =pl.Trainer(gpus=1,max_epochs=5,progress_bar_refresh_rate =1,flush_logs_every_n_steps=100)
-trainer.fit(VGGTrainer(),dataset.pdfdataset())
+trainer =pl.Trainer(gpus=0,max_epochs=5,progress_bar_refresh_rate =0.5,flush_logs_every_n_steps=100)
+trainer.fit(MyTrainer(),dataset.pdfdataset())

@@ -21,7 +21,7 @@ def convert(directory,name,width):
     pdfFile = open(directory+name,'rb')
     # Get the array of bytes from the stream
     byteArray = pdfFile.read()
-    print(byteArray)
+    #print(byteArray)
     # Put the individual bytes (ascii values) into an array
     for byte in byteArray:
         int_array.append(byte)
@@ -52,14 +52,14 @@ def draw_image(int_array,width,name,directory):
     img = Image.new('L',(width,width))
     img.putdata(int_array)
     # Needed separate line since you cannot use str.replace in f strings
-    trimmed_name = name.replace("pdf","png")
+    trimmed_name = name + ".png"
     path_name = f"{directory}{trimmed_name}"
     img.save(path_name)
     return(path_name)
 
 # Takes the larger image and scales it down to the given width
 def compress_image(width,name,directory):
-    trimmed_name = name.replace("pdf","png")
+    trimmed_name = name + ".png"
     path_name = f"{directory}{trimmed_name}"
     img = cv2.imread(path_name,cv2.IMREAD_UNCHANGED)
     dimension = (width,width)

@@ -1,14 +1,15 @@
 import byteplot as bp
+import byteplotmalicious as bpm
 import torch
 from torch.utils import data
 from torch.utils.data import Dataset, DataLoader
 import os
 import numpy as np
 import cv2
-
-path_name_benign = 'Data\\Sample\\'
-path_name_malicious = 'Data\\Sample\\'
-
+#path_name_benign = 'Data/Sample/'
+#path_name_malicious = 'Data/Sample/'
+path_name_benign = 'Data/CLEAN_PDF_9000_files/'
+path_name_malicious = 'Data/MALWARE_PDF_PRE_04-2011_10982_files/'
 
 class PDFDataset(Dataset):
     def __init__(self,plot_type):
@@ -35,7 +36,11 @@ class PDFDataset(Dataset):
         return X, y
 
     def _to_tensor(self, X, y):
-        return torch.tensor(X, dtype=torch.float32), torch.tensor(y, dtype=torch.long)
+        tensorX = torch.tensor(X, dtype=torch.float32) 
+        tensorY = torch.tensor(y, dtype=torch.long)
+        tensorX = tensorX.unsqueeze(0)
+        #print(tensorX.shape)
+        return tensorX,tensorY
     
     # Get the actual dataset pdfs and load them into a dictionary(good and bad pdfs)
     def _load(self):
@@ -50,20 +55,20 @@ class PDFDataset(Dataset):
         if self.plot_type == 'byte_plot':
             # Convert all pdfs to images and save their paths in a list
             for file_name in os.listdir(benign_files):
-                if file_name.endswith('pdf'):
-                    # converts each image and adds its respective integer array to the dictionary
-                    bp.convert(benign_files,file_name,256)
-                    img_file_name=file_name.replace("pdf","png")
-                    path_name = f"{benign_files}{img_file_name}"
+                if file_name.endswith('png'):
+                    # converts each image and adds its respective integer array to the dictionary, remove this line once all files have been converted (only needs to be run once on the entire dataset)
+                    #bp.convert(benign_files,file_name,256)
+                    #img_file_name=file_name.replace("pdf","png")
+                    path_name = f"{benign_files}{file_name}"
                     path_list_benign.append(cv2.imread(path_name,cv2.IMREAD_UNCHANGED))
             # add this list to the dictionary as benign's value
             data_by_type['benign'] = path_list_benign
             # Do the same for the malicious files
             for file_name in os.listdir(malicious_files):
-                if file_name.endswith('pdf'):
-                    bp.convert(malicious_files,file_name,256)
-                    img_file_name=file_name.replace("pdf","png")
-                    path_name = f"{malicious_files}{img_file_name}"
+                if file_name.endswith('png'):
+                    #bpm.convert(malicious_files,file_name,256)
+                    #img_file_name=file_name + "png"
+                    path_name = f"{malicious_files}{file_name}"
                     path_list_malicious.append(cv2.imread(path_name,cv2.IMREAD_UNCHANGED))
             data_by_type['malicious'] = path_list_malicious
 
