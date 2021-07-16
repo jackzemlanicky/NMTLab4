@@ -55,19 +55,22 @@ class PDFDataset(Dataset):
         if self.plot_type == 'byte_plot':
             # Convert all pdfs to images and save their paths in a list
             for file_name in os.listdir(benign_files):
+                if not file_name.endswith('png'):
+                    #converts any pdf into a byteplot
+                    bp.convert(benign_files,file_name,256)
                 if file_name.endswith('png'):
-                    # converts each image and adds its respective integer array to the dictionary, remove this line once all files have been converted (only needs to be run once on the entire dataset)
-                    #bp.convert(benign_files,file_name,256)
-                    #img_file_name=file_name.replace("pdf","png")
+                    #if the current file is a byteplot, add it to the input list
                     path_name = f"{benign_files}{file_name}"
                     path_list_benign.append(cv2.imread(path_name,cv2.IMREAD_UNCHANGED))
             # add this list to the dictionary as benign's value
             data_by_type['benign'] = path_list_benign
             # Do the same for the malicious files
             for file_name in os.listdir(malicious_files):
+                if not file_name.endswith('png'):
+                    #if the current file is a pdf, convert it (malicious pdf's dont end with '.pdf')
+                    bpm.convert(malicious_files,file_name,256)
                 if file_name.endswith('png'):
-                    #bpm.convert(malicious_files,file_name,256)
-                    #img_file_name=file_name + "png"
+                    #if it is a byte plot, add it to the list of inputs
                     path_name = f"{malicious_files}{file_name}"
                     path_list_malicious.append(cv2.imread(path_name,cv2.IMREAD_UNCHANGED))
             data_by_type['malicious'] = path_list_malicious
