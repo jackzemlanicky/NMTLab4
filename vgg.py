@@ -3,7 +3,7 @@ from pytorch_lightning.trainer.trainer import Trainer
 import torch
 import torchvision.models as models
 from torchvision.models.vgg import vgg11
-import pytorch_dataset_template as dataset
+import dataset as dataset
 import pytorch_lightning as pl
 from torch.optim import Adam, optimizer
 from pytorch_lightning.callbacks import EarlyStopping

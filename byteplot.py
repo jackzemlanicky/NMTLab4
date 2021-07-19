@@ -9,8 +9,6 @@ import numpy as np
 from numpy import ceil, sqrt
 import cv2
 import os
-
-
 # functions
 
 # main function to convert a pdf into a grayscale image using the byte plot strategy
@@ -34,7 +32,6 @@ def convert(directory,name,width):
         pad_zeroes(int_array,big_width)
         draw_image(int_array,big_width,name,directory)
         return compress_image(width,name,directory)
-        
 
 # Pad extra zeroes to get to the next square 
 def pad_zeroes(int_array,width):
@@ -66,4 +63,4 @@ def compress_image(width,name,directory):
     cv2.imwrite(path_name,img)
     return(path_name)
 
-#convert('Sample\\','10esnonresestatsnap.pdf',256)
+#convert('Data/Sample/','uk_qi_attachment_v3_2006.pdf',256)

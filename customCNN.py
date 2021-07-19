@@ -5,7 +5,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
-import pytorch_dataset_template as data
+import dataset as data
 
 # Figure out parameters for the convolutions
 '''
@@ -29,7 +29,7 @@ class Net(nn.Module):
         self.fc3 = nn.Linear(10,2)
 
     def forward(self, x):
-        #print(x.shape)
+        print(x.shape)
         x = self.conv1(x)
         #print(x.shape)
         x = F.relu(x)

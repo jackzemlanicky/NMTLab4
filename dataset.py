@@ -6,6 +6,7 @@ from torch.utils.data import Dataset, DataLoader
 import os
 import numpy as np
 import cv2
+import pickle
 #path_name_benign = 'Data/Sample/'
 #path_name_malicious = 'Data/Sample/'
 path_name_benign = 'Data/CLEAN_PDF_9000_files/'
@@ -51,8 +52,26 @@ class PDFDataset(Dataset):
         data_by_type = {'benign':None,'malicious':None}
         path_list_benign = []
         path_list_malicious = []
+        # check for pickled data file
+        if os.path.isfile('Data/pickledinputs.txt'):
+            print("Pickled data detected. Skipping bulk i/o and unpickling data...")
+            labelunpickler = open("Data/pickledlabels.txt",'rb')
+            labels = []
+            labels.append(pickle.load(labelunpickler))
+            self.labels = labels
+            #print(labels)
+            inputunpickler = open("Data/pickledinputs.txt",'rb')
+            X = []
+            X.append(pickle.load(inputunpickler))
+            self.X = X
+            #print(X)
+            print("Done!")
+            return
+    
+        
         # only 2 key/value pairs in the dictionary, 'benign' and 'malicious'. Each value will be a list containing x and y path names to corresponding grayscale images
         if self.plot_type == 'byte_plot':
+            print("why")
             # Convert all pdfs to images and save their paths in a list
             for file_name in os.listdir(benign_files):
                 if not file_name.endswith('png'):
@@ -87,11 +106,22 @@ class PDFDataset(Dataset):
             label = np.repeat(file_type[k],n)
             labels.extend(label)
         self.labels = labels
+        # Create the text file to store the data
+        serializedlabels = open("Data/pickledlabels.txt",'x')
+        print("Created file for pickling the labels")
+        # pickle the data and dump it into the text file
+        with open("Data/pickledlabels.txt",'wb') as fh:
+            pickle.dump(labels, fh)
+
         # Implement list of inputs, X
         X = []
         for k in data_by_type.keys():
             X.extend(data_by_type[k])
         self.X = X
+        serializedinputs = open("Data/pickledinputs.txt", 'x')
+        print("Created file for pickling the inputs")
+        with open("Data/pickledinputs.txt",'wb') as fh:
+            pickle.dump(X,fh)
 
 def pdfdataset()-> DataLoader:
     dataset = PDFDataset('byte_plot')
