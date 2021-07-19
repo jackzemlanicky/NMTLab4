@@ -56,13 +56,11 @@ class PDFDataset(Dataset):
         if os.path.isfile('Data/pickledinputs.txt'):
             print("Pickled data detected. Skipping bulk i/o and unpickling data...")
             labelunpickler = open("Data/pickledlabels.txt",'rb')
-            labels = []
-            labels.append(pickle.load(labelunpickler))
+            labels = pickle.load(labelunpickler)
             self.labels = labels
             #print(labels)
             inputunpickler = open("Data/pickledinputs.txt",'rb')
-            X = []
-            X.append(pickle.load(inputunpickler))
+            X = pickle.load(inputunpickler)
             self.X = X
             #print(X)
             print("Done!")

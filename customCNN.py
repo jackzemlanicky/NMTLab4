@@ -29,7 +29,7 @@ class Net(nn.Module):
         self.fc3 = nn.Linear(10,2)
 
     def forward(self, x):
-        print(x.shape)
+        #print(x.shape)
         x = self.conv1(x)
         #print(x.shape)
         x = F.relu(x)
