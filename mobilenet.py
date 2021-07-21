@@ -1,14 +1,10 @@
-from pytorch_lightning import callbacks
 import torch.nn as nn
-import torchvision
 import torchvision.models as models
 import dataset as dataset
 import pytorch_lightning as pl
-from torch.optim import Adam, optimizer
-from pytorch_lightning.callbacks import EarlyStopping
-from torch.multiprocessing import freeze_support
-print(torchvision.__version__)
-class SqueezeNetTrainer(pl.LightningModule):
+from torch.optim import Adam
+
+class MobileNetTrainer(pl.LightningModule):
     def __init__(self):
         super().__init__()
         self.model = models.mobilenet_v3_large()
@@ -16,7 +12,6 @@ class SqueezeNetTrainer(pl.LightningModule):
         x =self.model(x)
         return x
     def training_step(self, *args, **kwargs):
-        print(self.model.classifier)
         return super().training_step(*args, **kwargs)
     def train_dataloader(self):
         return super().train_dataloader()
@@ -30,6 +25,6 @@ class SqueezeNetTrainer(pl.LightningModule):
     # modify the layers to fit our desired input/output
     def modify_model(self):
         self.model.classifier[1] = nn.Linear(1280,2)
-earlystop = EarlyStopping(monitor=None,patience=1,mode='min')
+
 trainer =pl.Trainer(gpus=0,max_epochs=5,progress_bar_refresh_rate =1,flush_logs_every_n_steps=100)
-trainer.fit(SqueezeNetTrainer(),dataset.pdfdataset())
+trainer.fit(MobileNetTrainer(),dataset.pdfdataset())
