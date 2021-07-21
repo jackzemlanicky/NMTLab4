@@ -1,5 +1,6 @@
 from pytorch_lightning import callbacks
 import torch
+import torch.nn as nn
 import torchvision
 import torchvision.models as models
 import dataset as dataset
@@ -22,6 +23,14 @@ class SqueezeNetTrainer(pl.LightningModule):
     def configure_optimizers(self):
         optimizer = Adam(self.model.parameters(),lr=.01)
         return {'optimizer':optimizer}
+    def random_weights(self):
+        self.model = models.squeezenet1_1(pretrained = False)
+    def pretrained_weights(self):
+        self.model = models.squeezenet1_1(pretrained = True)
+    #modify the layers to fit our desired input/output
+    def modify_model(self):
+        self.model.classifier[1] = nn.Conv2d(512,1,(1,1),(1,1))
+
 
 earlystop = EarlyStopping(monitor=None,patience=1,mode='min')
 
